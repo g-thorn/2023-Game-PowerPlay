@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot;
 
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.checkerframework.checker.units.qual.C;
@@ -19,6 +20,8 @@ public class Robot {
 
     public IMU mIMU;
 
+    public Controlboard mControlboard;
+
     public Robot(OpMode op) {
         mSubsystemManager = new SubsystemManager();
 
@@ -34,6 +37,8 @@ public class Robot {
                 mClawSubsystem,
                 mIMU
         );
+
+        mControlboard = new Controlboard(op);
     }
 
     public void initHardware() {
@@ -45,7 +50,18 @@ public class Robot {
     }
 
     public void periodic() {
+        /** Driver */
+        Translation2d driveTranslation = mControlboard.drive();
+        double rotation = mControlboard.rotation();
 
+        mDriveSubsystem.mecanumDrive(driveTranslation, rotation);
+
+        /** Operator */
+        int joint1Change = (int)mControlboard.joint1() * 10;
+        mArmSubsystem.updateJoint1Setpoint(joint1Change);
+
+        int joint2Change = (int)mControlboard.joint2() * 10;
+        mArmSubsystem.updateJoint2Setpoint(joint2Change);
     }
 
     public void stop() {

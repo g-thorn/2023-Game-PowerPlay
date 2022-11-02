@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.Robot;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
@@ -29,14 +29,20 @@ public class Constants {
 
         public static final DcMotor.ZeroPowerBehavior jointZeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
 
+        public static final int joint1Max = 300;
+        public static final int joint1Min = -50;
+
         public static class Joint1Controller {
             public static final double kP = 0.0;
             public static final double kI = 0.0;
             public static final double kD = 0.0;
             public static final double kF = 0.0;
 
-            public static final double tolerance = 5.0;
+            public static final int tolerance = 10;
         }
+
+        public static final int joint2Max = 300;
+        public static final int joint2Min = -50;
 
         public static class Joint2Controller {
             public static final double kP = 0.0;
@@ -44,7 +50,7 @@ public class Constants {
             public static final double kD = 0.0;
             public static final double kF = 0.0;
 
-            public static final double tolerance = 5.0;
+            public static final int tolerance = 10;
         }
     }
 
@@ -82,7 +88,9 @@ public class Constants {
     }
 
     public static class ControlConstants {
-        public static double stickDeadzone = 0.2;
+        public static double driverDeadzone = 0.2;
+        public static double armDeadzone = 0.2;
+
     }
 
     public static final CurrentUnit currentUnit = CurrentUnit.MILLIAMPS;

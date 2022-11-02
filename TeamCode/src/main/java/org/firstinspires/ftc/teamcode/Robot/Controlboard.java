@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.Robot;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.teamcode.Lib.Controller;
 import org.firstinspires.ftc.teamcode.Robot.Constants.ControlConstants;
 
@@ -16,8 +15,9 @@ public class Controlboard {
         operator = new Controller(op.gamepad2);
     }
 
+    /** Driver */
     public Translation2d drive() {
-        if (Math.abs(driver.leftX()) > ControlConstants.stickDeadzone || Math.abs(driver.leftY()) > ControlConstants.stickDeadzone) {
+        if (Math.abs(driver.leftX()) > ControlConstants.driverDeadzone || Math.abs(driver.leftY()) > ControlConstants.driverDeadzone) {
             double x = driver.leftX() * 0.5;
             double y = driver.leftY() * 0.5;
             return new Translation2d(x, y);
@@ -26,11 +26,25 @@ public class Controlboard {
     }
 
     public double rotation() {
-        if (Math.abs(driver.rightX()) > ControlConstants.stickDeadzone) {
+        if (Math.abs(driver.rightX()) > ControlConstants.driverDeadzone) {
             double rot = driver.rightX();
             return rot;
         }
         return 0.0;
     }
 
+    /** Operator */
+    public double joint1() {
+        if (Math.abs(operator.leftX()) > ControlConstants.armDeadzone) {
+            return operator.leftX();
+        }
+        return 0.0;
+    }
+
+    public double joint2() {
+        if (Math.abs(operator.leftY()) > ControlConstants.armDeadzone) {
+            return operator.leftY();
+        }
+        return 0.0;
+    }
 }

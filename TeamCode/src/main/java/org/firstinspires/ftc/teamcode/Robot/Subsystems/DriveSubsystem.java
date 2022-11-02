@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot.Subsystems;
 
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -88,10 +89,10 @@ public class DriveSubsystem extends Subsystem {
         mPeriodicIO.rightBackCurrent = rightBackDrive.getCurrent(Constants.currentUnit);
     }
 
-    public void mecanumDrive(double leftX, double leftY, double rightX) {
-        double axial    = -leftY;
-        double lateral  = leftX;
-        double yaw      = rightX;
+    public void mecanumDrive(Translation2d translation2d, double rotation) {
+        double axial    = -translation2d.getY();
+        double lateral  = translation2d.getX();
+        double yaw      = rotation;
 
         mPeriodicIO.leftFrontDemand     = axial + lateral + yaw;
         mPeriodicIO.leftBackDemand      = axial - lateral - yaw;

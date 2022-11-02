@@ -19,6 +19,9 @@ public class FullTele extends OpMode {
     public void init() {
         mRobot.mSubsystemManager.initAllHardware();
         mRobot.mSubsystemManager.initAllAction();
+
+        mRobot.initHardware();
+        mRobot.initAction();
     }
 
     @Override
@@ -26,10 +29,14 @@ public class FullTele extends OpMode {
         mRobot.mSubsystemManager.readAll();
         mRobot.mSubsystemManager.periodicAll();
         mRobot.mSubsystemManager.writeAll();
+
+        mRobot.periodic();
     }
 
     @Override
     public void stop() {
         mRobot.mSubsystemManager.stopALl();
+
+        mRobot.stop();
     }
 }
