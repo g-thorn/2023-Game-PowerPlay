@@ -6,17 +6,17 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.Lib.Controller;
 import org.firstinspires.ftc.teamcode.Robot.Constants.ControlConstants;
 
-public class Controlboard {
+public class ControlBoard {
     private Controller driver;
     private Controller operator;
 
-    public Controlboard(OpMode op) {
+    public ControlBoard(OpMode op) {
         driver = new Controller(op.gamepad1);
         operator = new Controller(op.gamepad2);
     }
 
     /** Driver */
-    public Translation2d drive() {
+    public Translation2d driveTranslation() {
         if (Math.abs(driver.leftX()) > ControlConstants.driverDeadzone || Math.abs(driver.leftY()) > ControlConstants.driverDeadzone) {
             double x = driver.leftX() * 0.5;
             double y = driver.leftY() * 0.5;

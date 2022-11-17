@@ -12,7 +12,7 @@ import java.util.List;
 public class SubsystemManager {
     private List<Subsystem> mAllSubsystems;
 
-    SubsystemManager() {}
+    public SubsystemManager() {}
 
     public void setSubsystems(Subsystem... allSubsystems) {
         mAllSubsystems = Arrays.asList(allSubsystems);
@@ -22,11 +22,6 @@ public class SubsystemManager {
         return mAllSubsystems;
     }
 
-    public void initAllHardware() {
-        for (Subsystem s : mAllSubsystems) {
-            s.initHardware();
-        }
-    }
 
     public void initAllAction() {
         for (Subsystem s : mAllSubsystems) {

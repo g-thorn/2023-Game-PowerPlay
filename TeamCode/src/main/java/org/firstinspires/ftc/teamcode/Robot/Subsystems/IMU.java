@@ -14,7 +14,6 @@ public class IMU extends Subsystem {
     BNO055IMU imu;
 
     public IMU(OpMode op) {
-        super(op);
 
         imu = op.hardwareMap.get(BNO055IMU.class, IMUConstants.deviceName);
 
@@ -47,6 +46,10 @@ public class IMU extends Subsystem {
     @Override
     public void periodic() {
 
+    }
+
+    public double getHeadingRadians() {
+        return Math.toRadians(mPeriodicIO.heading);
     }
 
     @Override

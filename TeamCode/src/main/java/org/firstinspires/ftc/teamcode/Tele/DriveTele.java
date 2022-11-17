@@ -1,20 +1,22 @@
 package org.firstinspires.ftc.teamcode.Tele;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import org.firstinspires.ftc.teamcode.Robot.ControlBoard;
 import org.firstinspires.ftc.teamcode.Robot.SubsystemOpMode;
 import org.firstinspires.ftc.teamcode.Robot.Subsystems.Drive;
 
-@TeleOp(name="Teleop", group="OpMode")
-public class FullTele extends SubsystemOpMode {
+public class DriveTele extends SubsystemOpMode {
 
     private ControlBoard mControlBoard;
     private Drive mDrive;
 
+    private DriveTele() {
+        mControlBoard = new ControlBoard(this);
 
-    private FullTele() {
+        mDrive = new Drive(this);
 
+        mSubsystemManager.setSubsystems(
+                mDrive
+        );
     }
 
     @Override
@@ -24,11 +26,13 @@ public class FullTele extends SubsystemOpMode {
 
     @Override
     public void opPeriodic() {
-
+        mDrive.mecanumDrive(mControlBoard.driveTranslation(), mControlBoard.rotation());
     }
 
     @Override
     public void opStop() {
 
     }
+
+
 }

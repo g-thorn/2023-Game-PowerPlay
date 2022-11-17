@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Robot.Constants.ServoConstants.ClawServo;
 import org.firstinspires.ftc.teamcode.Robot.Constants.ServoConstants.ZServo;
 import org.firstinspires.ftc.teamcode.Robot.Constants.ServoConstants.XServo;
 
-public class ClawSubsystem extends Subsystem {
+public class Claw extends Subsystem {
 
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
@@ -32,8 +32,7 @@ public class ClawSubsystem extends Subsystem {
     }
     ZState zState;
 
-    public ClawSubsystem(OpMode op) {
-        super(op);
+    public Claw(OpMode op) {
 
         clawServo = op.hardwareMap.get(Servo.class, ClawServo.deviceName);
         clawServo.scaleRange(ClawServo.min, ClawServo.max);

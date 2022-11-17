@@ -3,42 +3,40 @@ package org.firstinspires.ftc.teamcode.Robot;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.checkerframework.checker.units.qual.C;
-import org.firstinspires.ftc.teamcode.Lib.Subsystem;
 import org.firstinspires.ftc.teamcode.Robot.Subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.Robot.Subsystems.ClawSubsystem;
-import org.firstinspires.ftc.teamcode.Robot.Subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.Robot.Subsystems.Claw;
+import org.firstinspires.ftc.teamcode.Robot.Subsystems.Drive;
 import org.firstinspires.ftc.teamcode.Robot.Subsystems.IMU;
-
+//9277 sucks
 public class Robot {
 
     public SubsystemManager mSubsystemManager;
 
-    public DriveSubsystem mDriveSubsystem;
+    public Drive mDrive;
     public ArmSubsystem mArmSubsystem;
-    public ClawSubsystem mClawSubsystem;
+    public Claw mClaw;
 
     public IMU mIMU;
 
-    public Controlboard mControlboard;
+    public ControlBoard mControlBoard;
 
     public Robot(OpMode op) {
         mSubsystemManager = new SubsystemManager();
 
-        mDriveSubsystem = new DriveSubsystem(op);
+        mDrive = new Drive(op);
         mArmSubsystem = new ArmSubsystem(op);
-        mClawSubsystem = new ClawSubsystem(op);
+        mClaw = new Claw(op);
 
         mIMU = new IMU(op);
 
         mSubsystemManager.setSubsystems(
-                mDriveSubsystem,
+                mDrive,
                 mArmSubsystem,
-                mClawSubsystem,
+                mClaw,
                 mIMU
         );
 
-        mControlboard = new Controlboard(op);
+        mControlBoard = new ControlBoard(op);
     }
 
     public void initHardware() {
@@ -51,16 +49,16 @@ public class Robot {
 
     public void periodic() {
         /** Driver */
-        Translation2d driveTranslation = mControlboard.drive();
-        double rotation = mControlboard.rotation();
+        Translation2d driveTranslation = mControlBoard.driveTranslation();
+        double rotation = mControlBoard.rotation();
 
-        mDriveSubsystem.mecanumDrive(driveTranslation, rotation);
+        mDrive.mecanumDrive(driveTranslation, rotation);
 
         /** Operator */
-        int joint1Change = (int)mControlboard.joint1() * 10;
+        int joint1Change = (int) mControlBoard.joint1() * 10;
         mArmSubsystem.updateJoint1Setpoint(joint1Change);
 
-        int joint2Change = (int)mControlboard.joint2() * 10;
+        int joint2Change = (int) mControlBoard.joint2() * 10;
         mArmSubsystem.updateJoint2Setpoint(joint2Change);
     }
 
