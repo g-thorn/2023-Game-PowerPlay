@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Robot;
 
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -20,14 +21,18 @@ public class Constants {
 
         public static final DcMotor.ZeroPowerBehavior driveBrakeOnInit = DcMotor.ZeroPowerBehavior.FLOAT;
 
-        public static final PIDFCoefficients drivePIDFCoefficients = new PIDFCoefficients(0.0, 0.0, 0.0, 0.0);
-
         public static class DrivePIDF {
             public static final double kP = 0.0;
             public static final double kI = 0.0;
             public static final double kD = 0.0;
             public static final double kF = 0.0;
         }
+
+        // Speed Scaling
+        public static double slowScale = 0.2;
+        public static double normalScale = 0.4;
+        public static double fastScale = 0.75;
+
 
         // Meters  (W: 0.13385, L: 0.1225)
         private static final double halfWidth = 0.13385;
@@ -40,78 +45,58 @@ public class Constants {
 
     }
 
-    public static class ArmConstants {
-        public static final String joint1Name = "armJoint1";
-        public static final String joint2Name = "armJoint2";
+    public static class LiftConstants {
+        public static final String leftWinchName = "lWinch";
+        public static final DcMotorEx.Direction leftDirection = DcMotorEx.Direction.FORWARD;
 
-        public static final DcMotor.Direction joint1Direction = DcMotorSimple.Direction.REVERSE;
-        public static final DcMotor.Direction joint2Direction = DcMotorSimple.Direction.FORWARD;
+        public static final String rightWinchName = "rWinch";
+        public static final DcMotorEx.Direction rightDirection = DcMotorEx.Direction.REVERSE;
 
-        public static final DcMotor.ZeroPowerBehavior jointZeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
+        public static DcMotorEx.ZeroPowerBehavior zeroPowerBehavior = DcMotorEx.ZeroPowerBehavior.BRAKE;
 
-        public static final int joint1Max = 300;
-        public static final int joint1Min = -50;
 
-        public static class Joint1Controller {
+        public static class LiftController {
             public static final double kP = 0.0;
             public static final double kI = 0.0;
             public static final double kD = 0.0;
             public static final double kF = 0.0;
-
-            public static final int tolerance = 10;
+            public static double tolerance = 10.0;
         }
 
-        public static final int joint2Max = 300;
-        public static final int joint2Min = -50;
+        public static int maximumTravel = 100;
+        public static int minimumTravel = 0;
 
-        public static class Joint2Controller {
-            public static final double kP = 0.0;
-            public static final double kI = 0.0;
-            public static final double kD = 0.0;
-            public static final double kF = 0.0;
+        public static int positionChangeScale = 10;
 
-            public static final int tolerance = 10;
-        }
+        public static int downPosition = 0;
+        public static int lowPosition = 10;
+        public static int mediumPosition = 30;
+        public static int highPosition = 50;
     }
 
-    public static class ServoConstants {
-        public static class ClawServo {
-            public static final String deviceName = "clawServo";
+    public static class LiftClawConstants {
+        public static final String name = "clawServo";
+        public static final boolean inverted = false;
+        public static final double min = 0.0;
+        public static final double max = 1.0;
 
-            public static final double min = 0.0;
-            public static final double max = 0.0;
-
-            public static final Servo.Direction direction = Servo.Direction.FORWARD;
-        }
-
-        public static class XServo {
-            public static final String deviceName = "xServo";
-
-            public static final double min = 0.0;
-            public static final double max = 0.0;
-
-            public static final Servo.Direction direction = Servo.Direction.FORWARD;
-        }
-
-        public static class ZServo {
-            public static final String deviceName = "zServo";
-
-            public static final double min = 0.0;
-            public static final double max = 0.0;
-
-            public static final Servo.Direction direction = Servo.Direction.FORWARD;
-        }
+        public static final double openPosition = 0.0;
+        public static final double closedPosition = 0.0;
     }
+
+
 
     public static class IMUConstants {
         public static final String deviceName = "imu";
     }
 
     public static class ControlConstants {
-        public static double driverDeadzone = 0.2;
-        public static double armDeadzone = 0.2;
+        public static final double driveDeadBan = 0.2;
+        public static final double rotationDeadBan = 0.15;
 
+        public static final double liftDeadBan = 0.2;
     }
+
 
     public static final CurrentUnit currentUnit = CurrentUnit.MILLIAMPS;
 }

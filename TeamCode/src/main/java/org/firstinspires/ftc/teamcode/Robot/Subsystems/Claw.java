@@ -1,54 +1,30 @@
 package org.firstinspires.ftc.teamcode.Robot.Subsystems;
 
+import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Lib.Subsystem;
-import org.firstinspires.ftc.teamcode.Robot.Constants.ServoConstants.ClawServo;
-import org.firstinspires.ftc.teamcode.Robot.Constants.ServoConstants.ZServo;
-import org.firstinspires.ftc.teamcode.Robot.Constants.ServoConstants.XServo;
 
 public class Claw extends Subsystem {
 
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
-    private Servo clawServo;
-    private Servo xServo;
-    private Servo zServo;
+    private ServoEx clawServo;
+
+    private final double rangeMax;
+    private final double rangeMin;
 
 
-    private enum ClawState {
-        OPEN, WIDE_OPEN, CLOSED, MANUAL
-    }
-    ClawState clawState;
+    public Claw(OpMode op, String name, boolean inverted, double rangeMax, double rangeMin) {
 
-    private enum XState {
-        LEFT_FLIP, MIDDLE, RIGHT_FLIP, MANUAL
-    }
-    XState xState;
+        this.rangeMax = rangeMax;
+        this.rangeMin = rangeMin;
 
-    private enum ZState {
-        LEVEL, MANUAL
-    }
-    ZState zState;
-
-    public Claw(OpMode op) {
-
-        clawServo = op.hardwareMap.get(Servo.class, ClawServo.deviceName);
-        clawServo.scaleRange(ClawServo.min, ClawServo.max);
-        clawServo.setDirection(ClawServo.direction);
-
-        xServo = op.hardwareMap.get(Servo.class, XServo.deviceName);
-        xServo.scaleRange(XServo.min, XServo.max);
-        xServo.setDirection(XServo.direction);
-
-        zServo = op.hardwareMap.get(Servo.class, ZServo.deviceName);
-        zServo.scaleRange(ZServo.min, ZServo.max);
-        zServo.setDirection(ZServo.direction);
-    }
-
-    @Override
-    public void initHardware() {
+        clawServo = (ServoEx) op.hardwareMap.get(Servo.class, name);
+        clawServo.setInverted(inverted);
+        clawServo.setRange(rangeMin, rangeMax);
 
     }
 
@@ -62,9 +38,6 @@ public class Claw extends Subsystem {
 
     }
 
-    public void setClawServoState(ClawState clawState) {
-
-    }
 
     @Override
     public void periodic() {
@@ -73,12 +46,27 @@ public class Claw extends Subsystem {
 
     @Override
     public void readPeriodicInputs() {
-
+        mPeriodicIO.clawPosition =  clawServo.getPosition();
     }
 
     @Override
     public void writePeriodicOutputs() {
+        // Apply Limits
+        if (mPeriodicIO.clawDemand > rangeMax) {
+            mPeriodicIO.clawDemand = rangeMax;
+        } else if (mPeriodicIO.clawDemand < rangeMin) {
+            mPeriodicIO.clawDemand = rangeMin;
+        }
 
+        clawServo.setPosition(mPeriodicIO.clawDemand);
+    }
+
+    public void setClawPosition(double position) {
+        mPeriodicIO.clawDemand = position;
+    }
+
+    public void changeClawPosition(double change) {
+        mPeriodicIO.clawDemand = getClawPosition() + change;
     }
 
     @Override
@@ -86,9 +74,13 @@ public class Claw extends Subsystem {
 
     }
 
+    public double getClawPosition() {
+        return mPeriodicIO.clawPosition;
+    }
+
     private class PeriodicIO {
+        double clawPosition;
+
         double clawDemand;
-        double xDemand;
-        double zDemand;
     }
 }

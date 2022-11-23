@@ -14,7 +14,10 @@ public abstract class SubsystemOpMode extends OpMode {
     @Override
     public void init() {
         mSubsystemManager.initAllAction();
+
         opInit();
+
+        telemetry.update();
     }
 
     public abstract void opInit();
@@ -26,15 +29,21 @@ public abstract class SubsystemOpMode extends OpMode {
         mSubsystemManager.writeAll();
 
         opPeriodic();
+
+        telemetryPeriodic();
+        telemetry.update();
     }
 
     public abstract void opPeriodic();
+    public abstract void telemetryPeriodic();
 
     @Override
     public void stop() {
         mSubsystemManager.stopALl();
 
         opStop();
+
+        telemetry.update();
     }
 
     public abstract void opStop();

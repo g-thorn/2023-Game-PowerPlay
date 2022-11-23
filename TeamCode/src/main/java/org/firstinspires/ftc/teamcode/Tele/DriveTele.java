@@ -26,7 +26,21 @@ public class DriveTele extends SubsystemOpMode {
 
     @Override
     public void opPeriodic() {
-        mDrive.mecanumDrive(mControlBoard.driveTranslation(), mControlBoard.rotation());
+
+        if (mControlBoard.getDriveFastMode()) {
+            mDrive.setFastMode();
+        } else if (mControlBoard.getDriveSlowMode()) {
+            mDrive.setSlowMode();
+        } else {
+            mDrive.setNormalMode();
+        }
+
+        mDrive.mecanumDrive(mControlBoard.getDriveTranslation(), mControlBoard.getDriveRotation());
+    }
+
+    @Override
+    public void telemetryPeriodic() {
+
     }
 
     @Override

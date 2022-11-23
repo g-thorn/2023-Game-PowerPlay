@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.Lib.Controller;
 import org.firstinspires.ftc.teamcode.Robot.Constants.ControlConstants;
 
 public class ControlBoard {
-    private Controller driver;
-    private Controller operator;
+    public Controller driver;
+    public Controller operator;
 
     public ControlBoard(OpMode op) {
         driver = new Controller(op.gamepad1);
@@ -16,33 +16,50 @@ public class ControlBoard {
     }
 
     /** Driver */
-    public Translation2d driveTranslation() {
-        if (Math.abs(driver.leftX()) > ControlConstants.driverDeadzone || Math.abs(driver.leftY()) > ControlConstants.driverDeadzone) {
-            double x = driver.leftX() * 0.5;
-            double y = driver.leftY() * 0.5;
+    public Translation2d getDriveTranslation() {
+        if (Math.abs(driver.leftX()) > ControlConstants.driveDeadBan || Math.abs(driver.leftY()) > ControlConstants.driveDeadBan) {
+            double x = driver.leftX();
+            double y = driver.leftY();
             return new Translation2d(x, y);
         }
         return new Translation2d(0.0, 0.0);
     }
 
-    public double rotation() {
-        if (Math.abs(driver.rightX()) > ControlConstants.driverDeadzone) {
+    public double getDriveRotation() {
+        if (Math.abs(driver.rightX()) > ControlConstants.rotationDeadBan) {
             double rot = driver.rightX();
             return rot;
         }
         return 0.0;
     }
 
-    /** Operator */
-    public double joint1() {
-        if (Math.abs(operator.leftX()) > ControlConstants.armDeadzone) {
-            return operator.leftX();
-        }
-        return 0.0;
+    public boolean getDriveFastMode() {
+        return driver.B();
     }
 
-    public double joint2() {
-        if (Math.abs(operator.leftY()) > ControlConstants.armDeadzone) {
+    public boolean getDriveSlowMode() {
+        return driver.A();
+    }
+
+    /** Operator */
+    public boolean getLiftHigh() {
+        return operator.Y();
+    }
+
+    public boolean getLiftMedium() {
+        return operator.X();
+    }
+
+    public boolean getLiftLow() {
+        return operator.B();
+    }
+
+    public boolean getLiftDown() {
+        return operator.A();
+    }
+
+    public double getLiftChange() {
+        if (Math.abs(operator.leftY()) >= ControlConstants.liftDeadBan) {
             return operator.leftY();
         }
         return 0.0;

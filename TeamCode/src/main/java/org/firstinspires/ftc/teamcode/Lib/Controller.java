@@ -57,6 +57,14 @@ public class Controller {
         return gamepad.right_stick_button;
     }
 
+    public double leftTrigger() {
+        return gamepad.left_trigger;
+    }
+
+    public double rightTrigger() {
+        return gamepad.right_trigger;
+    }
+
     public boolean leftBumper() {
         return gamepad.left_bumper;
     }
