@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.Tele;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.Robot.ControlBoard;
 import org.firstinspires.ftc.teamcode.Robot.SubsystemOpMode;
 import org.firstinspires.ftc.teamcode.Robot.Subsystems.Drive;
 
+@TeleOp(name="DriveTele", group="OpMode")
 public class DriveTele extends SubsystemOpMode {
 
     private ControlBoard mControlBoard;
@@ -35,7 +38,7 @@ public class DriveTele extends SubsystemOpMode {
             mDrive.setNormalMode();
         }
 
-        mDrive.mecanumDrive(mControlBoard.getDriveTranslation(), mControlBoard.getDriveRotation());
+        mDrive.mecanumDrive(mControlBoard.getDriveTranslation(), mControlBoard.getDriveRotation(), true);
     }
 
     @Override

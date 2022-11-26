@@ -52,7 +52,7 @@ public class FullTele extends SubsystemOpMode {
             mDrive.setNormalMode();
         }
 
-        mDrive.mecanumDrive(mControlBoard.getDriveTranslation(), mControlBoard.getDriveRotation());
+        mDrive.mecanumDrive(mControlBoard.getDriveTranslation(), mControlBoard.getDriveRotation(), true);
 
         // Lift
         if (mControlBoard.getLiftDown()) {

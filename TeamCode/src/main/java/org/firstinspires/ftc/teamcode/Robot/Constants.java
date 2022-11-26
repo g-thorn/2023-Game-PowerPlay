@@ -38,10 +38,10 @@ public class Constants {
         private static final double halfWidth = 0.13385;
         private static final double halfLength = 0.1225;
 
-        public static final Translation2d frontLeftTranslation = new Translation2d(-halfWidth, halfLength);
-        public static final Translation2d frontRightTranslation = new Translation2d(halfWidth, halfLength);
-        public static final Translation2d backLeftTranslation = new Translation2d(-halfWidth, -halfLength);
-        public static final Translation2d backRightTranslation = new Translation2d(halfWidth, -halfLength);
+        public static final Translation2d frontLeftLocation = new Translation2d(-halfWidth, halfLength);
+        public static final Translation2d frontRightLocation = new Translation2d(halfWidth, halfLength);
+        public static final Translation2d backLeftLocation = new Translation2d(-halfWidth, -halfLength);
+        public static final Translation2d backRightLoation = new Translation2d(halfWidth, -halfLength);
 
     }
 

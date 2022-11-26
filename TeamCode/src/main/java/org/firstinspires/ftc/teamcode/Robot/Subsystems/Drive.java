@@ -1,13 +1,8 @@
 package org.firstinspires.ftc.teamcode.Robot.Subsystems;
 
-import static org.firstinspires.ftc.teamcode.Robot.Constants.DriveConstants.frontLeftTranslation;
-import static org.firstinspires.ftc.teamcode.Robot.Constants.DriveConstants.frontRightTranslation;
-import static org.firstinspires.ftc.teamcode.Robot.Constants.DriveConstants.backLeftTranslation;
-import static org.firstinspires.ftc.teamcode.Robot.Constants.DriveConstants.backRightTranslation;
-
-
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.geometry.Translation2d;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.ChassisSpeeds;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveKinematics;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -28,10 +23,11 @@ public class Drive extends Subsystem {
     private DcMotorEx rightFrontDrive;
     private DcMotorEx rightBackDrive;
 
-    private PIDFController leftFrontController;
-    private PIDFController leftBackController;
-    private PIDFController rightFrontController;
-    private PIDFController rightBackController;
+    private PIDFController driveController;
+
+    private PIDFController xController;
+    private PIDFController yController;
+    private PIDFController tController;
 
     private MecanumDriveKinematics mDriveKinematics;
     private ChassisSpeeds mChassisSpeeds;
@@ -48,32 +44,22 @@ public class Drive extends Subsystem {
         leftFrontDrive.setDirection(DriveConstants.leftDriveDirection);
         leftFrontDrive.setZeroPowerBehavior(DriveConstants.driveBrakeOnInit);
 
-        leftFrontController = new PIDFController(DrivePIDF.kP, DrivePIDF.kI, DrivePIDF.kD, DrivePIDF.kI);
-
         // Left Back Drive
         leftBackDrive = (DcMotorEx) op.hardwareMap.get(DcMotor.class, DriveConstants.leftBackName);
         leftBackDrive.setDirection(DriveConstants.leftDriveDirection);
         leftBackDrive.setZeroPowerBehavior(DriveConstants.driveBrakeOnInit);
-
-        leftBackController = new PIDFController(DrivePIDF.kP, DrivePIDF.kI, DrivePIDF.kD, DrivePIDF.kI);
-
 
         // Right Front Drive
         rightFrontDrive = (DcMotorEx) op.hardwareMap.get(DcMotor.class, DriveConstants.rightFrontName);
         rightFrontDrive.setDirection(DriveConstants.rightDriveDirection);
         rightFrontDrive.setZeroPowerBehavior(DriveConstants.driveBrakeOnInit);
 
-        rightFrontController = new PIDFController(DrivePIDF.kP, DrivePIDF.kI, DrivePIDF.kD, DrivePIDF.kI);
-
         // Right Back Drive
         rightBackDrive = (DcMotorEx) op.hardwareMap.get(DcMotor.class, DriveConstants.rightBackName);
         rightBackDrive.setDirection(DriveConstants.rightDriveDirection);
         rightBackDrive.setZeroPowerBehavior(DriveConstants.driveBrakeOnInit);
 
-        rightBackController = new PIDFController(DrivePIDF.kP, DrivePIDF.kI, DrivePIDF.kD, DrivePIDF.kI);
-
-        // Kinematics
-        mDriveKinematics = new MecanumDriveKinematics(frontLeftTranslation, frontRightTranslation, backLeftTranslation, backRightTranslation);
+        driveController = new PIDFController(DrivePIDF.kP, DrivePIDF.kI, DrivePIDF.kD, DrivePIDF.kI);
     }
 
     @Override
@@ -129,15 +115,15 @@ public class Drive extends Subsystem {
             rightBackDrive.setPower(mPeriodicIO.rightBackDemand);
 
         } else {
-            leftFrontDrive.setPower(leftFrontController.calculate(mPeriodicIO.leftFrontVelocity, mPeriodicIO.leftFrontDemand));
-            leftBackDrive.setPower(leftBackController.calculate(mPeriodicIO.leftBackVelocity, mPeriodicIO.leftFrontDemand));
-            rightFrontDrive.setPower(rightFrontController.calculate(mPeriodicIO.rightFrontVelocity, mPeriodicIO.rightFrontDemand));
-            rightBackDrive.setPower(rightBackController.calculate(mPeriodicIO.rightBackVelocity, mPeriodicIO.rightBackDemand));
+            leftFrontDrive.setPower(driveController.calculate(mPeriodicIO.leftFrontVelocity, mPeriodicIO.leftFrontDemand));
+            leftBackDrive.setPower(driveController.calculate(mPeriodicIO.leftBackVelocity, mPeriodicIO.leftFrontDemand));
+            rightFrontDrive.setPower(driveController.calculate(mPeriodicIO.rightFrontVelocity, mPeriodicIO.rightFrontDemand));
+            rightBackDrive.setPower(driveController.calculate(mPeriodicIO.rightBackVelocity, mPeriodicIO.rightBackDemand));
         }
     }
 
-    public void mecanumDrive(Translation2d translation2d, double rotation) {
-        isOpenLoop = true;
+    public void mecanumDrive(Translation2d translation2d, double rotation, boolean openLoop) {
+        isOpenLoop = openLoop;
 
         double axial    = -translation2d.getY();
         double lateral  = translation2d.getX();
@@ -151,21 +137,6 @@ public class Drive extends Subsystem {
         scaleDriveDemands();
     }
 
-
-    public void mecanumDriveClosed(Translation2d translation2d, double rotation) {
-        isOpenLoop = false;
-
-        double axial    = -translation2d.getY();
-        double lateral  = translation2d.getX();
-        double yaw      = rotation;
-
-        mPeriodicIO.leftFrontDemand     = axial + lateral + yaw;
-        mPeriodicIO.leftBackDemand      = axial - lateral - yaw;
-        mPeriodicIO.rightFrontDemand    = axial - lateral + yaw;
-        mPeriodicIO.rightBackDemand     = axial + lateral - yaw;
-
-        scaleDriveDemands();
-    }
 
     public void fieldCentricDrive(double headingR, Translation2d driveTranslation, double rightX) {
         isOpenLoop = false;
@@ -226,6 +197,22 @@ public class Drive extends Subsystem {
         leftBackDrive.setPower(0.0);
         rightFrontDrive.setPower(0.0);
         rightBackDrive.setPower(0.0);
+    }
+
+    public double getLeftFrontVelocity() {
+        return mPeriodicIO.leftFrontVelocity;
+    }
+
+    public double getLeftBackVelocity() {
+        return mPeriodicIO.leftBackVelocity;
+    }
+
+    public double getRightFrontVelocity() {
+        return mPeriodicIO.rightFrontVelocity;
+    }
+
+    public double getRightBackVelocity() {
+        return mPeriodicIO.rightBackVelocity;
     }
 
     private class PeriodicIO {

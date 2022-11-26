@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.Tele;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.Robot.Constants.LiftClawConstants;
 import org.firstinspires.ftc.teamcode.Robot.ControlBoard;
 import org.firstinspires.ftc.teamcode.Robot.SubsystemOpMode;
 import org.firstinspires.ftc.teamcode.Robot.Subsystems.Claw;
 
+@TeleOp(name="ClawTele", group="OpMode")
 public class ClawTele extends SubsystemOpMode {
 
     private ControlBoard mControlBoard;
@@ -22,14 +25,14 @@ public class ClawTele extends SubsystemOpMode {
 
     @Override
     public void opPeriodic() {
-        double deadban = 0.2;
+        double deadBan = 0.2;
         double step = 0.1;
 
         double setPoint = mLiftClaw.getClawPosition();
 
-        if (mControlBoard.driver.rightY() > deadban) {
+        if (mControlBoard.driver.rightY() > deadBan) {
             setPoint += step;
-        } else if (mControlBoard.driver.rightY() < -deadban) {
+        } else if (mControlBoard.driver.rightY() < -deadBan) {
             setPoint -= step;
         }
 
